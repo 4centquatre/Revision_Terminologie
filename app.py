@@ -179,9 +179,11 @@ if st.session_state.step == "reponse":
     question = dico[indice][indice2]
     st.session_state.questions[indice] = question
     st.write("Question : "+question)
-    reponse = st.text_input("Écris ta réponse (ou 'stop' pour arrêter)", key="reponse_input")
+    with st.form("form_reponse"):
+        reponse = st.text_input("Écris ta réponse (ou 'stop' pour arrêter)", key="reponse_input")
+        validee = st.form_submit_button("Valider")
 
-    if st.button("Valider"):
+    if validee:
         if reponse.lower() == "stop":
             st.session_state.step = "fin"
         else:
