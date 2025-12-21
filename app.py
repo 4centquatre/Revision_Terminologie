@@ -149,82 +149,93 @@ dico = {
     109: ["-trophie", "Développement"],
 }
 
-def main(dico):
+if "score" not in st.session_state:
+    st.session_state.score = 0
+if "questions" not in st.session_state:
+    st.session_state.questions = {}
+if "current" not in st.session_state:
+    st.session_state.current = None
+if "step" not in st.session_state:
+    st.session_state.step = "question"
+if "end" not in st.session_state:
+    st.session_state.end = {}
 
-    if "score" not in st.session_state:
-            st.session_state.score = 0
-    if "questions" not in st.session_state:
-        st.session_state.questions = {}
-    if "current" not in st.session_state:
-        st.session_state.current = None
-    if "step" not in st.session_state:
-        st.session_state.step = "question"
-    if "end" not in st.session_state:
-        st.session_state.end = {}
+st.title("Quiz Terminologie")
 
-    st.title("Quiz Terminologie")
-
-    if st.session_state.step == "question":
-        st.session_state.reponse = ""
-        if len(st.session_state.questions.keys()) >= len(dico.keys()):
-            st.session_state.step = "fin"
+if st.session_state.step == "question":
+    st.session_state.reponse = ""
+    if len(st.session_state.questions.keys()) >= len(dico.keys()):
+        st.session_state.step = "fin"
+    indice = randint(0, len(dico) - 1)
+    while indice in st.session_state.questions.keys():
         indice = randint(0, len(dico) - 1)
-        while indice in st.session_state.questions.keys():
-            indice = randint(0, len(dico) - 1)
-        st.session_state.current = indice
-        st.session_state.step = "reponse"
+    st.session_state.current = indice
+    st.session_state.step = "reponse"
+    st.rerun()
+
+if st.session_state.step == "reponse":
+    indice = st.session_state.current
+    indice2 = randint(0,len(dico[indice])-1)
+    question = dico[indice][indice2]
+    st.session_state.questions[indice] = question
+    st.write("Question : "+question)
+    with st.form("form_reponse"):
+        reponse = st.text_input("Écris ta réponse (ou 'stop' pour arrêter)", key="reponse_input")
+        validee = st.form_submit_button("Valider")
+
+    if validee:
+        if reponse.lower() == "stop":
+            st.session_state.step = "fin"
+        else:
+            st.session_state.step = "feedback"
+            st.session_state.reponse = reponse
         st.rerun()
 
-    if st.session_state.step == "reponse":
-        indice = st.session_state.current
-        indice2 = randint(0,len(dico[indice])-1)
-        question = dico[indice][indice2]
-        st.session_state.questions[indice] = question
-        st.write("Question : "+question)
-        with st.form("form_reponse"):
-            reponse = st.text_input("Écris ta réponse (ou 'stop' pour arrêter)", key="reponse_input")
-            validee = st.form_submit_button("Valider")
+if st.session_state.step == "feedback":
+    indice = st.session_state.current
+    chaine = ""
+    for car in dico[indice]:
+        chaine += car + " "
+    st.write("La réponse était : "+chaine)
+    vrai_faux = st.radio("Tu as eu :", ["Vrai", "Faux"], horizontal=True)
 
-        if validee:
-            if reponse.lower() == "stop":
-                st.session_state.step = "fin"
-            else:
-                st.session_state.step = "feedback"
-                st.session_state.reponse = reponse
-            st.rerun()
+    if st.button("Continuer"):
+        if vrai_faux == "Vrai":
+            st.session_state.score += 1
+        elif vrai_faux == "Faux":
+            st.session_state.end[indice] = dico[indice]
+        st.session_state.step = "question"
+        st.rerun()
 
-    if st.session_state.step == "feedback":
-        indice = st.session_state.current
+if st.session_state.step == "fin":
+    st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys())-1)+ " Bravo mon coeur t'es trop forte !")
+    if len(st.session_state.end.keys())>1:
+        st.write("Tes reponses fausses etaient : ")
+    elif len(st.session_state.end.keys()) == 1:
+        st.write("Ta reponse fausse etait : ")
+    else:
+        st.write("Tu n'as eu aucune reponse fausse bravo !")
+    for tab in st.session_state.end.values():
         chaine = ""
-        for car in dico[indice]:
-            chaine += car + " "
-        st.write("La réponse était : "+chaine)
-        vrai_faux = st.radio("Tu as eu :", ["Vrai", "Faux"], horizontal=True)
-
-        if st.button("Continuer"):
-            if vrai_faux == "Vrai":
-                st.session_state.score += 1
-            elif vrai_faux == "Faux":
-                st.session_state.end[indice] = dico[indice]
+        for item in tab:
+            chaine = chaine + str(item) + " "
+        st.write(chaine)
+    if st.button("Refaire"):
+        st.session_state.score = 0
+        st.session_state.questions = {}
+        st.session_state.end = {}
+        st.session_state.current = None
+        st.session_state.step = "question"
+        st.rerun()
+    elif st.button("Refaire avec tes erreurs"):
+        if len(st.session_state.end) > 0:
+            st.session_state.questions = {}
+            st.session_state.score = 0
+            st.session_state.current = None
             st.session_state.step = "question"
+            st.session_state.mode_dico = st.session_state.end.copy()
             st.rerun()
-
-    if st.session_state.step == "fin":
-        st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys())-1)+ " Bravo mon coeur t'es trop forte !")
-        if len(st.session_state.end.keys())>1:
-            st.write("Tes reponses fausses etaient : ")
-        elif len(st.session_state.end.keys()) == 1:
-            st.write("Ta reponse fausse etait : ")
         else:
-            st.write("Tu n'as eu aucune reponse fausse bravo !")
-        for tab in st.session_state.end.values():
-            chaine = ""
-            for item in tab:
-                chaine = chaine + str(item) + " "
-            st.write(chaine)
-        if st.button("Refaire"):
-            main(dico)
-        elif st.button("Refaire tes erreurs"):
-            main(st.session_state.end)
+            st.warning("Tu n'as aucune erreur à refaire.")
 
-main(dico)
+
