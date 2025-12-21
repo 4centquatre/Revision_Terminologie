@@ -177,8 +177,6 @@ if st.session_state.step == "question":
         tab_indices.append(cle)
     i = randint(0, len(tab_indices) - 1)
     indice = tab_indices[i]
-    """while indice in st.session_state.questions.keys():
-        indice = randint(0, len(st.session_state.dico) - 1)"""
     st.session_state.indice = indice
     st.session_state.step = "reponse"
     st.rerun()
