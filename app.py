@@ -191,7 +191,7 @@ if st.session_state.step == "feedback":
     for car in dico[indice]:
         chaine += car + " "
     st.write("La réponse était : "+chaine)
-    vrai_faux = st.radio("Tu as eu :", ["Faux", "Vrai"], horizontal=True)
+    vrai_faux = st.radio("Tu as eu :", ["Vrai", "Faux"], horizontal=True)
 
     if st.button("Continuer"):
         if vrai_faux == "Vrai":
@@ -201,4 +201,4 @@ if st.session_state.step == "feedback":
 
 # Étape finale
 if st.session_state.step == "fin":
-    st.write("C'est fini ! Score : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys())-1))
+    st.write("C'est fini ! Score : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys())-1)+"Bravo mon coeur t'es trop forte !")
