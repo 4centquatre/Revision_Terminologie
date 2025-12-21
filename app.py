@@ -166,13 +166,13 @@ if st.session_state.step == "question":
     st.session_state.reponse = ""
     if len(st.session_state.questions.keys()) >= len(dico.keys()):
         st.session_state.step = "fin"
-        st.rerun()
+        #st.rerun()
     indice = randint(0, len(dico) - 1)
     while indice in st.session_state.questions.keys():
         indice = randint(0, len(dico) - 1)
     st.session_state.current = indice
     st.session_state.step = "reponse"
-    st.rerun()
+    #st.rerun()
 
 if st.session_state.step == "reponse":
     indice = st.session_state.current
@@ -188,7 +188,7 @@ if st.session_state.step == "reponse":
         else:
             st.session_state.step = "feedback"
             st.session_state.reponse = reponse
-        st.rerun()
+        #st.rerun()
 
 if st.session_state.step == "feedback":
     indice = st.session_state.current
@@ -204,7 +204,7 @@ if st.session_state.step == "feedback":
         elif vrai_faux == "Faux":
             st.session_state.end[indice] = dico[indice]
         st.session_state.step = "question"
-        st.rerun()
+        #st.rerun()
 
 # Étape finale
 if st.session_state.step == "fin":
@@ -220,3 +220,5 @@ if st.session_state.step == "fin":
         for item in tab:
             chaine = chaine + str(item) + " "
         st.write(chaine)
+    if st.button("refaire"):
+        st.rerun()
