@@ -209,5 +209,5 @@ if st.session_state.step == "fin":
     for tab in st.session_state.end.items():
         chaine = ""
         for item in tab:
-            chaine += item + " "
+            chaine = chaine + str(item) + " "
         st.write(chaine)
