@@ -206,6 +206,12 @@ if st.session_state.step == "feedback":
 # Étape finale
 if st.session_state.step == "fin":
     st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys())-1)+ " Bravo mon coeur t'es trop forte !")
+    if len(st.session_state.end.keys())>1:
+        st.write("Tes reponses fausses etaient : ")
+    elif len(st.session_state.end.keys()) == 1:
+        st.write("Ta reponse fausse etait : ")
+    else:
+        st.write("Tu n'as eu aucune reponse fausse bravo !")
     for tab in st.session_state.end.values():
         chaine = ""
         for item in tab:
