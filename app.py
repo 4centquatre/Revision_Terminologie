@@ -111,7 +111,7 @@ dico = {
     98: ["insulin(o)-", "Insuline"],
     99: ["néphr(o)-", "Rein"],
     100: ["ur(o)-", "Urine"],
-    101: ["étranger", "Étranger"],
+    101: ["xén(o)", "Étranger"],
 
     102: ["leuc(o)-", "Blanc"],
     103: ["lymph(o)-", "Lymphe"],
@@ -172,6 +172,7 @@ if st.session_state.step == "question":
     st.session_state.reponse = ""
     if len(st.session_state.questions.keys()) >= len(st.session_state.dico.keys()):
         st.session_state.step = "fin"
+        st.rerun()
     tab_indices = []
     for cle in st.session_state.dico.keys():
         tab_indices.append(cle)
@@ -243,9 +244,7 @@ if st.session_state.step == "fin":
             st.session_state.score = 0
             st.session_state.current = None
             st.session_state.step = "question"
-            #st.warning(st.session_state.dico)
             st.session_state.dico = st.session_state.end.copy()
-            #st.warning(st.session_state.dico)
             st.session_state.end = {}
             st.session_state.indice = None
             st.session_state.indice2 = None
