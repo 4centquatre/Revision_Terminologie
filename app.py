@@ -157,6 +157,8 @@ if "current" not in st.session_state:
     st.session_state.current = None
 if "step" not in st.session_state:
     st.session_state.step = "question"
+if "end" not in st.session_state:
+    st.session_state.end = {}
 
 st.title("Quiz Terminologie")
 
@@ -196,9 +198,12 @@ if st.session_state.step == "feedback":
     if st.button("Continuer"):
         if vrai_faux == "Vrai":
             st.session_state.score += 1
+        elif vrai_faux == "Faux":
+            st.session_state.end[indice] = dico[indice]
         st.session_state.step = "question"
         st.rerun()
 
 # Étape finale
 if st.session_state.step == "fin":
     st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys())-1)+ "Bravo mon coeur t'es trop forte !")
+    st.write(st.session_state.end)
