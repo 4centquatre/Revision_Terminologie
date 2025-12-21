@@ -218,7 +218,7 @@ if st.session_state.step == "feedback":
         st.rerun()
 
 if st.session_state.step == "fin":
-    st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys()))+ " Bravo mon coeur t'es trop forte !")
+    st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys())-1)+ " Bravo mon coeur t'es trop forte !")
     if len(st.session_state.end.keys())>1:
         st.write("Tes reponses fausses etaient : ")
     elif len(st.session_state.end.keys()) == 1:
