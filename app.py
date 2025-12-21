@@ -177,6 +177,8 @@ if st.session_state.step == "question":
     for cle in st.session_state.dico.keys():
         tab_indices.append(cle)
     i = randint(0, len(tab_indices) - 1)
+    while tab_indices[i] not in st.session_state.end.keys():
+        i = randint(0, len(tab_indices) - 1)
     indice = tab_indices[i]
     st.session_state.indice = indice
     st.session_state.step = "reponse"
