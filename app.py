@@ -172,9 +172,13 @@ if st.session_state.step == "question":
     st.session_state.reponse = ""
     if len(st.session_state.questions.keys()) >= len(st.session_state.dico.keys()):
         st.session_state.step = "fin"
-    indice = randint(0, len(st.session_state.dico) - 1)
-    while indice in st.session_state.questions.keys():
-        indice = randint(0, len(st.session_state.dico) - 1)
+    tab_indices = []
+    for cle in st.session_state.dico.keys():
+        tab_indices.append(cle)
+    i = randint(0, len(tab_indices) - 1)
+    indice = tab_indices[i]
+    """while indice in st.session_state.questions.keys():
+        indice = randint(0, len(st.session_state.dico) - 1)"""
     st.session_state.indice = indice
     st.session_state.step = "reponse"
     st.rerun()
