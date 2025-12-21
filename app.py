@@ -201,4 +201,8 @@ if st.session_state.step == "feedback":
 
 # Étape finale
 if st.session_state.step == "fin":
+<<<<<<< HEAD
     st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys())-1)+ "Bravo mon coeur t'es trop forte !")
+=======
+    st.write("C'est fini ! Score : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys())-1))
+>>>>>>> 15bf981d0cdacb296da37bfc410d0afa7352f0c8
