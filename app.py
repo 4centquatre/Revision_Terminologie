@@ -159,24 +159,26 @@ if "step" not in st.session_state:
     st.session_state.step = "question"
 if "end" not in st.session_state:
     st.session_state.end = {}
+if "dico" not in st.session_state:
+    st.session_state.dico = dico.copy()
 
 st.title("Quiz Terminologie")
 
 if st.session_state.step == "question":
     st.session_state.reponse = ""
-    if len(st.session_state.questions.keys()) >= len(dico.keys()):
+    if len(st.session_state.questions.keys()) >= len(st.session_state.dico.keys()):
         st.session_state.step = "fin"
-    indice = randint(0, len(dico) - 1)
+    indice = randint(0, len(st.session_state.dico) - 1)
     while indice in st.session_state.questions.keys():
-        indice = randint(0, len(dico) - 1)
+        indice = randint(0, len(st.session_state.dico) - 1)
     st.session_state.current = indice
     st.session_state.step = "reponse"
     st.rerun()
 
 if st.session_state.step == "reponse":
     indice = st.session_state.current
-    indice2 = randint(0,len(dico[indice])-1)
-    question = dico[indice][indice2]
+    indice2 = randint(0,len(st.session_state.dico[indice])-1)
+    question = st.session_state.dico[indice][indice2]
     st.session_state.questions[indice] = question
     st.write("Question : "+question)
     with st.form("form_reponse"):
@@ -194,7 +196,7 @@ if st.session_state.step == "reponse":
 if st.session_state.step == "feedback":
     indice = st.session_state.current
     chaine = ""
-    for car in dico[indice]:
+    for car in st.session_state.dico[indice]:
         chaine += car + " "
     st.write("La réponse était : "+chaine)
     vrai_faux = st.radio("Tu as eu :", ["Vrai", "Faux"], horizontal=True)
@@ -203,7 +205,7 @@ if st.session_state.step == "feedback":
         if vrai_faux == "Vrai":
             st.session_state.score += 1
         elif vrai_faux == "Faux":
-            st.session_state.end[indice] = dico[indice]
+            st.session_state.end[indice] = st.session_state.dico[indice]
         st.session_state.step = "question"
         st.rerun()
 
@@ -226,6 +228,7 @@ if st.session_state.step == "fin":
         st.session_state.end = {}
         st.session_state.current = None
         st.session_state.step = "question"
+        st.session_state.dico = dico.copy()
         st.rerun()
     elif st.button("Refaire avec tes erreurs"):
         if len(st.session_state.end) > 0:
@@ -233,7 +236,8 @@ if st.session_state.step == "fin":
             st.session_state.score = 0
             st.session_state.current = None
             st.session_state.step = "question"
-            st.session_state.mode_dico = st.session_state.end.copy()
+            st.session_state.dico = st.session_state.end.copy()
+            st.session_state.end = {}
             st.rerun()
         else:
             st.warning("Tu n'as aucune erreur à refaire.")
