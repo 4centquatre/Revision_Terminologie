@@ -217,7 +217,7 @@ if st.session_state.step == "feedback":
         st.rerun()
 
 if st.session_state.step == "fin":
-    st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys())-1)+ " Bravo mon coeur t'es trop forte !")
+    st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys()))+ " Bravo mon coeur t'es trop forte !")
     if len(st.session_state.end.keys())>1:
         st.write("Tes reponses fausses etaient : ")
     elif len(st.session_state.end.keys()) == 1:
@@ -244,14 +244,14 @@ if st.session_state.step == "fin":
             st.session_state.questions = {}
             st.session_state.score = 0
             st.session_state.current = None
-            #st.session_state.step = "question"
-            st.warning(st.session_state.dico)
+            st.session_state.step = "question"
+            #st.warning(st.session_state.dico)
             st.session_state.dico = st.session_state.end.copy()
-            st.warning(st.session_state.dico)
+            #st.warning(st.session_state.dico)
             st.session_state.end = {}
             st.session_state.indice = None
             st.session_state.indice2 = None
-            #st.rerun()
+            st.rerun()
         else:
             st.warning("Tu n'as aucune erreur à refaire.")
 
