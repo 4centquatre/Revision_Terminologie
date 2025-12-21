@@ -226,3 +226,5 @@ def main(dico):
             main(dico)
         elif st.button("Refaire tes erreurs"):
             main(st.session_state.end)
+
+main(dico)
