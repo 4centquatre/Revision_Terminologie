@@ -241,7 +241,9 @@ if st.session_state.step == "fin":
             st.session_state.score = 0
             st.session_state.current = None
             st.session_state.step = "question"
+            st.warning(st.session_state.dico)
             st.session_state.dico = st.session_state.end.copy()
+            st.warning(st.session_state.dico)
             st.session_state.end = {}
             st.session_state.indice = None
             st.session_state.indice2 = None
