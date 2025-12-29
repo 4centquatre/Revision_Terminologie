@@ -153,6 +153,8 @@ if "score" not in st.session_state:
     st.session_state.score = 0
 if "questions" not in st.session_state:
     st.session_state.questions = {}
+if "dico_reponses" not in st.session_state:
+    st.session_state.dico_reponses = {}
 if "current" not in st.session_state:
     st.session_state.current = None
 if "step" not in st.session_state:
@@ -191,15 +193,16 @@ if st.session_state.step == "reponse":
     st.session_state.questions[st.session_state.indice] = question
     st.write("Question : "+question)
     with st.form("form_reponse"):
-        reponse = st.text_input("Écris ta réponse (ou 'stop' pour arrêter)", key="reponse_input")
+        reponse = st.text_input("Écris ta réponse", key="reponse_input")
         validee = st.form_submit_button("Valider")
 
-    if validee:
-        if reponse.lower() == "stop":
-            st.session_state.step = "fin"
-        else:
-            st.session_state.step = "feedback"
-            st.session_state.reponse = reponse
+    if st.button("Stop"):
+        st.session_state.step = "fin"
+
+    elif validee:
+        st.session_state.step = "feedback"
+        st.session_state.reponse = reponse
+        st.session_state.dico_reponses[indice] = reponse
         st.rerun()
 
 if st.session_state.step == "feedback":
@@ -207,6 +210,7 @@ if st.session_state.step == "feedback":
     for car in st.session_state.dico[st.session_state.indice]:
         chaine += car + " "
     st.write("La réponse était : "+chaine)
+    st.write("Ta réponse était : "+st.session_state.reponse)
     vrai_faux = st.radio("Tu as eu :", ["Vrai", "Faux"], horizontal=True)
 
     if st.button("Continuer"):
@@ -218,7 +222,7 @@ if st.session_state.step == "feedback":
         st.rerun()
 
 if st.session_state.step == "fin":
-    st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.questions.keys())-1)+ " Bravo mon coeur t'es trop forte !")
+    st.write("C'est fini ! Ton score est de : "+str(st.session_state.score)+"/"+str(len(st.session_state.dico_reponses.keys()))+ " Bravo mon coeur t'es trop forte !")
     if len(st.session_state.end.keys())>1:
         st.write("Tes reponses fausses etaient : ")
     elif len(st.session_state.end.keys()) == 1:
@@ -239,6 +243,8 @@ if st.session_state.step == "fin":
         st.session_state.dico = dico.copy()
         st.session_state.indice = None
         st.session_state.indice2 = None
+        st.session_state.reponse = ""
+        st.session_state.dico_reponses = {}
         st.rerun()
     elif st.button("Refaire avec tes erreurs"):
         if len(st.session_state.end) > 0:
@@ -250,6 +256,8 @@ if st.session_state.step == "fin":
             st.session_state.end = {}
             st.session_state.indice = None
             st.session_state.indice2 = None
+            st.session_state.reponse = ""
+            st.session_state.dico_reponses = {}
             st.rerun()
         else:
             st.warning("Tu n'as aucune erreur à refaire.")
