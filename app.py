@@ -300,7 +300,7 @@ if st.session_state.step == "reponse":
     elif validee:
         st.session_state.step = "feedback"
         st.session_state.reponse = reponse
-        st.session_state.dico_reponses[indice] = reponse
+        st.session_state.dico_reponses[st.session_state.indice] = reponse
         st.rerun()
 
 if st.session_state.step == "feedback":
